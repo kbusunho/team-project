@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import "./BucketItem.css";
 
-const BucketItem = ({ todo, onDelete, onUpdate }) => {
+const BucketItem = ({ bucket, onDelete, onUpdate }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [editText, setEditText] = useState(todo.text);
+  const [editText, setEditText] = useState(bucket.text);
 
   const handleSave = () => {
     if (editText.trim()) {
-      onUpdate(todo._id, editText.trim());
+      onUpdate(bucket._id, editText.trim());
       setIsEditing(false);
     }
   };
@@ -27,7 +27,7 @@ const BucketItem = ({ todo, onDelete, onUpdate }) => {
             className="btn btn-cancel"
             onClick={() => {
               setIsEditing(false);
-              setEditText(todo.text);
+              setEditText(bucket.text);
             }}
           >
             취소
@@ -35,14 +35,14 @@ const BucketItem = ({ todo, onDelete, onUpdate }) => {
         </>
       ) : (
         <>
-          <span>{todo.text}</span>
+          <span>{bucket.text}</span>
           <div className="btns">
             <button className="btn btn-edit" onClick={() => setIsEditing(true)}>
               수정
             </button>
             <button
               className="btn btn-delete"
-              onClick={() => onDelete(todo._id)}
+              onClick={() => onDelete(bucket._id)}
             >
               삭제
             </button>

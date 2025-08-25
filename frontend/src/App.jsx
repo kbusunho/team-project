@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import BucketForm from "./components/BucketForm";
 import BucketList from "./components/BucketList";
 import Header from "./components/Header";
+import axios from "axios";
+import { api, ensureGuestAuth } from './lib/api';
 import "./App.css";
 
 const users = [
@@ -11,7 +13,8 @@ const users = [
 ];
 
 function App() {
-  const [todos, setTodos] = useState([]);
+  const API = '/api/buckts';
+  const [buckets, setBuckets] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
 
   const API_URL = "http://localhost:3000/api/buckets";
@@ -34,7 +37,7 @@ function App() {
   useEffect(() => {
     fetch(API_URL)
       .then((res) => res.json())
-      .then((data) => setTodos(data))
+      .then((data) => setBuckets(data))
       .catch((err) => console.error("데이터 불러오기 실패:", err));
   }, []);
 
@@ -57,14 +60,14 @@ function App() {
       .then((res) => res.json())
       .then((data) => {
         if (!data.uid) data.uid = selectedUser.uid;
-        setTodos((prev) => [data, ...prev]);
+        setBuckets((prev) => [data, ...prev]);
       })
       .catch((err) => console.error("버킷 생성 실패:", err));
   };
 
   const onDelete = (id) => {
     fetch(`${API_URL}/${id}`, { method: "DELETE" })
-      .then(() => setTodos((prev) => prev.filter((t) => t._id !== id)))
+      .then(() => setBuckets((prev) => prev.filter((t) => t._id !== id)))
       .catch((err) => console.error("삭제 실패:", err));
   };
 
@@ -74,30 +77,53 @@ function App() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text: newText }),
     })
-      .then((res) => res.json())
-      .then((data) =>
-        setTodos((prev) =>
-          prev.map((t) => (t._id === id ? data.bucket : t))
-        )
-      )
-      .catch((err) => console.error("수정 실패:", err));
+      .then((res) => {
+        if (!res.ok) throw new Error("Network response was not ok");
+        return res.json();
+      })
+      .then((data) => {
+        console.log("Update response:", data);
+        if (data.bucket && data.bucket._id) {
+          setBuckets((prev) => {
+            const updatedBuckets = prev.map((t) =>
+              t._id === data.bucket._id ? data.bucket : t
+            );
+            console.log("Updated buckets:", updatedBuckets);
+            return updatedBuckets;
+          });
+        } else {
+          console.warn("Unexpected response format, fetching updated data...");
+          fetch(API_URL)
+            .then((res) => res.json())
+            .then((updatedBuckets) => {
+              console.log("Refreshed buckets:", updatedBuckets);
+              setBuckets(updatedBuckets);
+            })
+            .catch((err) => console.error("Failed to refresh buckets:", err));
+        }
+      })
+      .catch((err) => {
+        console.error("수정 실패:", err);
+        alert("수정에 실패했습니다. 다시 시도해주세요.");
+      });
   };
 
-  const filteredTodos = selectedUser
-    ? todos.filter((t) => t.uid === selectedUser.uid)
+  const filteredBuckets = selectedUser
+    ? buckets.filter((t) => t.uid === selectedUser.uid)
     : [];
+  console.log("Filtered buckets:", filteredBuckets); // 필터링된 데이터 확인
 
   return (
     <div className="App">
       <Header
         users={users}
         selectedUser={selectedUser}
-        onSelectUser={handleUserSelect} 
+        onSelectUser={handleUserSelect}
       />
       <main>
         <BucketForm onCreate={onCreate} selectedUser={selectedUser} />
         <BucketList
-          todos={filteredTodos}
+          buckets={filteredBuckets}
           onDelete={onDelete}
           onUpdate={onUpdate}
         />
