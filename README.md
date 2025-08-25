@@ -1,2 +1,2 @@
-# team-project
+# mern team project
 

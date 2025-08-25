@@ -1,0 +1,36 @@
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+    
+}
+
+.title {
+    font-size: 4rem;
+    margin-bottom: 10px;
+}
+
+.user-list {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.user-btn {
+    background: #eee;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.user-btn:hover {
+    background: #ddd;
+}
+
+.user-btn.active {
+
+    background: #333;
+    color: #fff;
+}
