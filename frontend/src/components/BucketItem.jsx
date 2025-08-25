@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./BucketItem.css";
 
 const BucketItem = ({ bucket, onDelete, onUpdate }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(bucket.text);
+
+  // ✅ bucket.text가 바뀌면 editText도 최신 값으로 반영
+  useEffect(() => {
+    setEditText(bucket.text);
+  }, [bucket.text]);
 
   const handleSave = () => {
     if (editText.trim()) {
@@ -27,7 +32,7 @@ const BucketItem = ({ bucket, onDelete, onUpdate }) => {
             className="btn btn-cancel"
             onClick={() => {
               setIsEditing(false);
-              setEditText(bucket.text);
+              setEditText(bucket.text); // 취소 시 원래 텍스트로 되돌리기
             }}
           >
             취소
