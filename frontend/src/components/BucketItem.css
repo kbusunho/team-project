@@ -1,0 +1,75 @@
+.bucket-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    background-color: #fff;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.bucket-item input {
+    padding: 8px;
+    font-size: 15px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    flex: 1;
+    margin-right: 8px;
+}
+
+.btns {
+    display: flex;
+    gap: 8px;
+}
+
+.btn {
+    padding: 6px 12px;
+    font-size: 20px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    color: #fff;
+}
+
+
+.btn-edit {
+    background-color: darkcyan;
+    font-family: 'Dongle', sans-serif;
+
+}
+
+.btn-edit:hover {
+    background-color: rgb(1, 109, 109);
+}
+
+.btn-delete {
+    background-color: indianred;
+    font-family: 'Dongle', sans-serif;
+
+}
+
+.btn-delete:hover {
+    background-color: rgb(153, 52, 52);
+}
+
+.btn-save {
+    background-color: darkkhaki;
+    font-family: 'Dongle', sans-serif;
+}
+
+.btn-save:hover {
+    background-color: rgb(90, 90, 1);
+}
+
+.btn-cancel {
+    background-color: gray;
+    font-family: 'Dongle', sans-serif;
+
+}
+
+.btn-cancel:hover {
+    background-color: #5a6268;
+}

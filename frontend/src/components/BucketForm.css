@@ -1,0 +1,33 @@
+.bucket-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+
+}
+
+.bucket-form input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-family: 'Dongle', sans-serif;
+}
+
+
+.btn-add {
+  font-family: 'Dongle', sans-serif;
+  font-size: 30px;
+  background-color: chocolate;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9) !important;
+
+}
+
+.btn-add:hover {
+  background-color: rgb(136, 79, 22);
+}
