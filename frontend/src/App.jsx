@@ -28,13 +28,14 @@ function App() {
   };
 
   useEffect(() => {
+    console.log('API URL:', import.meta.env.VITE_API_URL); // ✅ 디버깅용 로그
     const fetchTodos = async () => {
       try {
-        await ensureGuestAuth();  // ✅ 앱 로드 시 게스트 auth 보장
+        await ensureGuestAuth().catch(err => console.error("Guest auth failed:", err));
         const { data } = await api.get('/api/buckets');
         setTodos(data);
       } catch (err) {
-        console.error("데이터 불러오기 실패:", err);
+        console.error("데이터 불러오기 실패:", err.response ? err.response.data : err.message);
       }
     };
     fetchTodos();
@@ -52,31 +53,35 @@ function App() {
     };
 
     try {
+      console.log('Creating bucket:', newBucket); // ✅ 디버깅용 로그
       const { data } = await api.post('/api/buckets', newBucket);
       setTodos((prev) => [data, ...prev]);
     } catch (err) {
-      console.error("버킷 생성 실패:", err);
+      console.error("버킷 생성 실패:", err.response ? err.response.data : err.message);
     }
   };
 
   const onDelete = async (id) => {
     try {
+      console.log('Deleting bucket with id:', id); // ✅ 디버깅용 로그
       await api.delete(`/api/buckets/${id}`);
       setTodos((prev) => prev.filter((t) => t._id !== id));
     } catch (err) {
-      console.error("삭제 실패:", err);
+      console.error("삭제 실패:", err.response ? err.response.data : err.message);
     }
   };
 
   const onUpdate = async (id, newText) => {
     try {
+      console.log('Updating bucket with id:', id, 'newText:', newText); // ✅ 디버깅용 로그
       const { data } = await api.patch(`/api/buckets/${id}/text`, { text: newText });
-      const updated = data.bucket || data;
+      const updated = data.bucket || data; // ✅ 백엔드 응답 구조에 맞게 처리
+      if (!updated._id) throw new Error("업데이트 데이터가 유효하지 않음");
       setTodos((prev) =>
         prev.map((t) => (t._id === id ? updated : t))
       );
     } catch (err) {
-      console.error("수정 실패:", err);
+      console.error("수정 실패:", err.response ? err.response.data : err.message);
     }
   };
 

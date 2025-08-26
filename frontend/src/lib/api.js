@@ -18,6 +18,7 @@ api.interceptors.response.use(
         return api.request(err.config);
       } catch (e) {
         isAuthing = false;
+        console.error("Guest auth retry failed:", e.message); // ✅ 디버깅용 로그
       }
     }
     return Promise.reject(err);
@@ -31,5 +32,11 @@ export async function ensureGuestAuth() {
       Math.random().toString(36).slice(2);
     localStorage.setItem('deviceId', deviceId);
   }
-  await api.post('/api/auth/guest', { deviceId });
+  try {
+    console.log('Attempting guest auth with deviceId:', deviceId); // ✅ 디버깅용 로그
+    await api.post('/api/auth/guest', { deviceId });
+  } catch (err) {
+    console.error("Guest auth failed:", err.response ? err.response.data : err.message);
+    throw err;
+  }
 }
