@@ -5,7 +5,7 @@ module.exports = (req, res, next) => {
     if (!token) return res.status(401).json({ message: '인증 필요 (토큰 없음)' });
 
     try {
-        const payload = jwt.verify(token, process.env.JWT_SECRET); // ❌ 오타 있었음(playload → payload)
+        const payload = jwt.verify(token, process.env.JWT_SECRET);
         req.user = payload;
         next();
     } catch (error) {
