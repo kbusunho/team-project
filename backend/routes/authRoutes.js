@@ -14,7 +14,7 @@ router.post('/guest', (req, res) => {
 
     res.cookie('auth', token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        secure: false,
         sameSite: 'none', // 로컬/배포 호환
         maxAge: 7 * 24 * 60 * 60 * 1000 // 7일
     });

@@ -23,12 +23,8 @@ app.use(express.json());
 app.use(cookieParser());
 
 // CORS 설정 (로컬 + 배포 환경)
-const allowedOrigins = process.env.NODE_ENV === "production"
-    ? [process.env.FRONT_ORIGIN]
-    : ["http://localhost:5173", process.env.FRONT_ORIGIN];
-
 app.use(cors({
-    origin: allowedOrigins,
+    origin: process.env.FRONT_ORIGIN,
     credentials: true
 }));
 
