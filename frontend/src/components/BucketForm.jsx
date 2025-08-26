@@ -11,7 +11,7 @@ const BucketForm = ({ onCreate, selectedUser }) => {
       return;
     }
     if (!input.trim()) return;
-    onCreate(input);
+    onCreate({ goal: input.trim(), text: input.trim(), name: selectedUser.name, uid: selectedUser.uid, isCompleted: false });
     setInput("");
   };
 

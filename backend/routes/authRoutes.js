@@ -1,19 +1,26 @@
+// routes/authRoutes.js
 const express = require('express');
 const router = express.Router();
+const jwt = require('jsonwebtoken');
 
 router.post('/guest', (req, res) => {
-    // 게스트 토큰 또는 세션 생성 로직
-    const guestToken = Math.random().toString(36).substring(2); // 간단한 토큰 예시
-    console.log('Guest token generated:', guestToken); // ✅ 디버깅용 로그
-    
-    // ✅ 쿠키로 설정: 크로스 도메인 지원
-    res.cookie('auth', guestToken, {
+    const deviceId = req.body.deviceId || Math.random().toString(36).substring(2);
+
+    const token = jwt.sign(
+        { uid: deviceId },
+        process.env.JWT_SECRET,
+        { expiresIn: '7d' }
+    );
+
+    res.cookie('auth', token, {
         httpOnly: true,
-        secure: true, // ✅ HTTPS에서만 작동 (배포 시 true)
-        sameSite: 'none', // ✅ 크로스 도메인 쿠키 허용
-        maxAge: 3600000 // 1시간
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax', // 로컬/배포 호환
+        maxAge: 7 * 24 * 60 * 60 * 1000 // 7일
     });
-    res.status(200).json({ message: '게스트 로그인 성공' });
+
+    console.log('Guest JWT issued:', token);
+    res.status(200).json({ uid: deviceId });
 });
 
 module.exports = router;

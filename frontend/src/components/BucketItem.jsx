@@ -20,9 +20,7 @@ const BucketItem = ({ todo, onDelete, onUpdate }) => {
             value={editText}
             onChange={(e) => setEditText(e.target.value)}
           />
-          <button className="btn btn-save" onClick={handleSave}>
-            저장
-          </button>
+          <button className="btn btn-save" onClick={handleSave}>저장</button>
           <button
             className="btn btn-cancel"
             onClick={() => {
@@ -35,17 +33,12 @@ const BucketItem = ({ todo, onDelete, onUpdate }) => {
         </>
       ) : (
         <>
-          <span>{todo.text}</span>
+          <div className="bucket-info">
+            <p><strong>내용:</strong> {todo.text}</p>
+          </div>
           <div className="btns">
-            <button className="btn btn-edit" onClick={() => setIsEditing(true)}>
-              수정
-            </button>
-            <button
-              className="btn btn-delete"
-              onClick={() => onDelete(todo._id)}
-            >
-              삭제
-            </button>
+            <button className="btn btn-edit" onClick={() => setIsEditing(true)}>수정</button>
+            <button className="btn btn-delete" onClick={() => onDelete(todo._id)}>삭제</button>
           </div>
         </>
       )}
