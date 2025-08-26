@@ -66,25 +66,20 @@ function App() {
   };
 
   const onUpdate = (id, newText) => {
-  fetch(`${API_URL}/${id}/text`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ text: newText }),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      if (!data.bucket) {
-        console.error("PATCH 응답에 bucket이 없습니다:", data);
-        return;
-      }
-      const updated = data.bucket; // ✅ 서버 응답에서 bucket 사용
-
-      setTodos((prev) =>
-        prev.map((t) => (t._id === id ? updated : t))
-      );
+    fetch(`${API_URL}/${id}/text`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: newText }),
     })
-    .catch((err) => console.error("수정 실패:", err));
-};
+      .then((res) => res.json())
+      .then((data) => {
+        const updated = data.bucket || data; // 응답 구조에 맞춰 안전 처리
+        setTodos((prev) =>
+          prev.map((t) => (t._id === id ? updated : t))
+        );
+      })
+      .catch((err) => console.error("수정 실패:", err));
+  };
 
   const filteredTodos = selectedUser
     ? todos.filter((t) => t.uid === selectedUser.uid)
